@@ -24,12 +24,22 @@ public class ContactManager {
     public void searchContact() {
         Input input = new Input();
         System.out.println("Search for contact name: ");
-        String name = input.getString();
-        try {
-            Stream<String> stream = Files.lines(filePath);
-            stream.filter(line -> line.contains(name)).forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String name = input.getStringCapitalized();
+        if (name.isBlank()) {
+            System.out.println("No name was entered.");
+            searchContact();
+        } else {
+            try {
+                List<String> data = Files.lines(filePath).toList();
+                List<String> searchMatches = data.stream().filter(line -> line.contains(name)).toList();
+                if (searchMatches.size() == 0) {
+                    System.out.println("Not contact found");
+                } else {
+                    data.stream().filter(line -> line.contains(name)).forEach(System.out::println);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -74,13 +84,7 @@ public class ContactManager {
         }
     }
 
-    //    public void writeFile() {
-//        try {
-//            Files.write(filePath, currentData, StandardOpenOption.APPEND);
-//        } catch(IOException e) {
-//            System.out.println("Something went wrong. . . " + e);
-//        }
-//    }
+
     public void writeFile(List<String> data) {
         try {
             Files.write(filePath, data, StandardOpenOption.APPEND);
@@ -129,9 +133,6 @@ public class ContactManager {
 
     public void printLines() {
         readLines();
-//        for (String line : fileData) {
-//            System.out.println(line);
-//        }
         fileData.forEach(System.out::println);
     }
 
@@ -150,20 +151,6 @@ public class ContactManager {
         System.out.println("Enter an option (1, 2, 3, 4 or 5):");
     }
 
-//    public void returnToMainMenu () {
-//        Input input = new Input();
-//        System.out.println();
-//        System.out.println("Return to main menu? (Yes/No):");
-//
-//        boolean answer = input.yesNo();
-//        if (answer) {
-//            mainMenu();
-//            runApplication();
-//        } else {
-//            System.out.println("Goodbye!");
-////            writeFile();
-//        }
-//    }
 
     public void returnToMainMenu () {
         Input input = new Input();
@@ -189,6 +176,7 @@ public class ContactManager {
         System.out.println("Choose an option:");
         System.out.println("1. Create another contact");
         System.out.println("2. Return to Main Menu");
+        System.out.println("3. Exit");
 
         int answer = input.getInt();
         if (answer == 1) {
@@ -197,8 +185,54 @@ public class ContactManager {
         } else if (answer == 2){
             mainMenu();
             runApplication();
+        } else if (answer == 3) {
+            System.out.println("Goodbye!");
         } else {
             continueToAddContact();
+        }
+    }
+
+    public void continueToSearchContact () {
+        Input input = new Input();
+        System.out.println();
+        System.out.println("Choose an option:");
+        System.out.println("1. Search another contact");
+        System.out.println("2. Return to Main Menu");
+        System.out.println("3. Exit");
+
+        int answer = input.getInt();
+        if (answer == 1) {
+            searchContact();
+            continueToSearchContact();
+        } else if (answer == 2){
+            mainMenu();
+            runApplication();
+        } else if (answer == 3) {
+            System.out.println("Goodbye!");
+        } else {
+            continueToSearchContact();
+        }
+    }
+
+    public void continueToDeleteContact () {
+        Input input = new Input();
+        System.out.println();
+        System.out.println("Choose an option:");
+        System.out.println("1. Delete another contact");
+        System.out.println("2. Return to Main Menu");
+        System.out.println("3. Exit");
+
+        int answer = input.getInt();
+        if (answer == 1) {
+            removeContact();
+            continueToDeleteContact();
+        } else if (answer == 2){
+            mainMenu();
+            runApplication();
+        } else if (answer == 3) {
+            System.out.println("Goodbye!");
+        } else {
+            continueToDeleteContact();
         }
     }
 
@@ -218,15 +252,14 @@ public class ContactManager {
             continueToAddContact();
         } else if (num == 3) {
             searchContact();
-            returnToMainMenu();
+            continueToSearchContact();
         } else if (num == 4) {
             contactHeader();
             printLines();
             removeContact();
-            returnToMainMenu();
+            continueToDeleteContact();
         } else if (num == 5) {
             System.out.println("Goodbye!");
-//            writeFile();
         }
 
 
