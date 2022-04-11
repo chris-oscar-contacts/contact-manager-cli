@@ -190,7 +190,8 @@ public class ContactManager {
             addContact();
             continueToAddContact();
         } else if (answer == 2){
-            returnToMainMenu();
+            mainMenu();
+            runApplication();
         } else {
             continueToAddContact();
         }
