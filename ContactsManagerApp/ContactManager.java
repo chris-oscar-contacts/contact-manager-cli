@@ -40,14 +40,20 @@ public class ContactManager {
         System.out.println("Enter the name of contact you would like to delete: ");
         String name = input.getString();
         try {
+            List<String> preDeleteList = Files.lines(filePath).toList();
             List<String> selectedData = Files.lines(filePath)
                     .filter(line -> !line.contains(name))
                     .collect(Collectors.toList());
-            System.out.println("Success! contact has been deleted.");
-            deleteLines(selectedData);
-        } catch (IOException e) {
+            if (preDeleteList.size() == selectedData.size()) {
+                System.out.println("Not match");
+            } else {
+                System.out.println("Success! contact has been deleted.");
+                deleteLines(selectedData);
+            }
+        } catch(IOException e){
             e.printStackTrace();
         }
+
     }
 
     public void deleteLines(List<String> data) {
@@ -190,7 +196,8 @@ public class ContactManager {
             addContact();
             continueToAddContact();
         } else if (answer == 2){
-            returnToMainMenu();
+            mainMenu();
+            runApplication();
         } else {
             continueToAddContact();
         }
