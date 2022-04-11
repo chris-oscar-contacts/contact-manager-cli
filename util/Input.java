@@ -6,6 +6,10 @@ public class Input {
     private Scanner sc = new Scanner(System.in);
 
     public String getString() {
+        return sc.nextLine();
+    }
+
+    public String getStringCapitalized() {
         String input = sc.nextLine();
         return capitalizeString(input);
     }
