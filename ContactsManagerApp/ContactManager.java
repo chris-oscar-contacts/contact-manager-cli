@@ -33,7 +33,6 @@ public class ContactManager {
         }
     }
 
-
     public void removeContact() {
         Input input = new Input();
         System.out.println();
@@ -108,7 +107,7 @@ public class ContactManager {
         Input input = new Input();
         System.out.println("Enter contact name:");
 //        StringBuilder contactName = new StringBuilder(input.getString());
-        String contactName= input.getString();
+        String contactName = input.getString();
         int contactLength = contactName.length();
         if (contactLength < 20) {
             for (int i = 0; i < 21 - contactLength; i++) {
