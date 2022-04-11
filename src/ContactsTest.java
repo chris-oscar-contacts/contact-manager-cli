@@ -1,3 +1,7 @@
+package src;
+
+import src.ContactsManager;
+
 import java.io.IOException;
 import java.util.Scanner;
 
