@@ -148,7 +148,7 @@ public class ContactManager {
     }
 
     public void mainMenu () {
-        System.out.println("********** Contact Manager **********");
+        System.out.println("********** Main Menu **********");
         System.out.println("1. View contacts.");
         System.out.println("2. Add a new contact.");
         System.out.println("3. Search a contact by name.");
