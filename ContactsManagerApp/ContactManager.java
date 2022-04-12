@@ -36,6 +36,7 @@ public class ContactManager {
                     System.out.println("Not contact found");
                 } else {
                     data.stream().filter(line -> line.contains(name)).forEach(System.out::println);
+                    continueToSearchContact();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -47,22 +48,27 @@ public class ContactManager {
         Input input = new Input();
         System.out.println();
         System.out.println("Enter the name of contact you would like to delete: ");
-        String name = input.getString();
+        String name = input.getStringCapitalized();
         try {
             List<String> preDeleteList = Files.lines(filePath).toList();
             List<String> selectedData = Files.lines(filePath)
                     .filter(line -> !line.contains(name))
                     .collect(Collectors.toList());
             if (preDeleteList.size() == selectedData.size()) {
-                System.out.println("Not match");
+                System.out.println("No match found");
             } else {
-                System.out.println("Success! contact has been deleted.");
-                deleteLines(selectedData);
+                System.out.println("Are you sure you want to delete " + name + "?");
+                boolean answer = input.yesNo();
+                if (answer) {
+                    System.out.println("Success! " + name + " has been deleted.");
+                    deleteLines(selectedData);
+                } else {
+                    continueToDeleteContact();
+                }
             }
         } catch(IOException e){
             e.printStackTrace();
         }
-
     }
 
     public void deleteLines(List<String> data) {
@@ -111,7 +117,7 @@ public class ContactManager {
         Input input = new Input();
         System.out.println("Enter contact name:");
 //        StringBuilder contactName = new StringBuilder(input.getString());
-        String contactName = input.getString();
+        String contactName = input.getStringCapitalized();
         int contactLength = contactName.length();
         if (contactLength < 20) {
             for (int i = 0; i < 21 - contactLength; i++) {
@@ -203,7 +209,6 @@ public class ContactManager {
         int answer = input.getInt();
         if (answer == 1) {
             searchContact();
-            continueToSearchContact();
         } else if (answer == 2){
             mainMenu();
             runApplication();
@@ -225,7 +230,6 @@ public class ContactManager {
         int answer = input.getInt();
         if (answer == 1) {
             removeContact();
-            continueToDeleteContact();
         } else if (answer == 2){
             mainMenu();
             runApplication();
