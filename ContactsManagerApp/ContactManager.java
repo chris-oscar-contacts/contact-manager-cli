@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 public class ContactManager {
 
@@ -33,7 +33,7 @@ public class ContactManager {
                 List<String> data = Files.lines(filePath).toList();
                 List<String> searchMatches = data.stream().filter(line -> line.contains(name)).toList();
                 if (searchMatches.size() == 0) {
-                    System.out.println("Not contact found");
+                    System.out.println("No contact found");
                 } else {
                     data.stream().filter(line -> line.contains(name)).forEach(System.out::println);
                     continueToSearchContact();
@@ -42,6 +42,7 @@ public class ContactManager {
                 e.printStackTrace();
             }
         }
+
     }
 
     public void removeContact() {
@@ -55,15 +56,16 @@ public class ContactManager {
                     .filter(line -> !line.contains(name))
                     .collect(Collectors.toList());
             if (preDeleteList.size() == selectedData.size()) {
-                System.out.println("No match found");
+                System.out.println("No contact found");
+                continueToDeleteContact();  //???
             } else {
                 System.out.println("Are you sure you want to delete " + name + "?");
-                boolean answer = input.yesNo();
+                boolean answer = input.yesNo(); //???
                 if (answer) {
                     System.out.println("Success! " + name + " has been deleted.");
                     deleteLines(selectedData);
                 } else {
-                    continueToDeleteContact();
+                    continueToDeleteContact(); //??
                 }
             }
         } catch(IOException e){
@@ -215,6 +217,7 @@ public class ContactManager {
         } else if (answer == 3) {
             System.out.println("Goodbye!");
         } else {
+            System.out.println("testing for bugs");
             continueToSearchContact();
         }
     }
@@ -256,7 +259,6 @@ public class ContactManager {
             continueToAddContact();
         } else if (num == 3) {
             searchContact();
-            continueToSearchContact();
         } else if (num == 4) {
             contactHeader();
             printLines();

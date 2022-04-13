@@ -29,7 +29,7 @@ public class Input {
     }
 
     public boolean yesNo() {
-//        System.out.println("yes or no?");
+        System.out.println("Yes / No");
         String userInput = sc.next();
         return userInput.equalsIgnoreCase("y") || userInput.equalsIgnoreCase("yes");
     }
