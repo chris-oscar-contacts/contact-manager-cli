@@ -25,7 +25,7 @@ public class ContactManager {
         Input input = new Input();
         System.out.println("Search for contact name: ");
         String name = input.getStringCapitalized();
-        if (name.isBlank()) {
+        if (name.isBlank() || isNumeric(name)) {
             System.out.println("No name was entered.");
             searchContact();
         } else {
@@ -47,30 +47,35 @@ public class ContactManager {
 
     public void removeContact() {
         Input input = new Input();
-        System.out.println();
         System.out.println("Enter the name of contact you would like to delete: ");
         String name = input.getStringCapitalized();
-        try {
-            List<String> preDeleteList = Files.lines(filePath).toList();
-            List<String> selectedData = Files.lines(filePath)
-                    .filter(line -> !line.contains(name))
-                    .collect(Collectors.toList());
-            if (preDeleteList.size() == selectedData.size()) {
-                System.out.println("No contact found");
-                continueToDeleteContact();  //???
-            } else {
-                System.out.println("Are you sure you want to delete " + name + "?");
-                boolean answer = input.yesNo(); //???
-                if (answer) {
-                    System.out.println("Success! " + name + " has been deleted.");
-                    deleteLines(selectedData);
+        if (name.isBlank() || isNumeric(name) || name.length() == 1) {
+            System.out.println("No name was entered.");
+            removeContact();
+        } else {
+            try {
+                List<String> preDeleteList = Files.lines(filePath).toList();
+                List<String> selectedData = Files.lines(filePath)
+                        .filter(line -> !line.contains(name))
+                        .collect(Collectors.toList());
+                if (preDeleteList.size() == selectedData.size()) {
+                    System.out.println("No contact found");
+                    continueToDeleteContact();  //???
                 } else {
-                    continueToDeleteContact(); //??
+                    System.out.println("Are you sure you want to delete " + name + "?");
+                    boolean answer = input.yesNo(); //???
+                    if (answer) {
+                        System.out.println("Success! " + name + " has been deleted.");
+                        deleteLines(selectedData);
+                    } else {
+                        continueToDeleteContact(); //??
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch(IOException e){
-            e.printStackTrace();
         }
+
     }
 
     public void deleteLines(List<String> data) {
@@ -262,13 +267,38 @@ public class ContactManager {
         } else if (num == 4) {
             contactHeader();
             printLines();
+            System.out.println();
             removeContact();
-            continueToDeleteContact();
         } else if (num == 5) {
             System.out.println("Goodbye!");
         }
-
-
-
     }
+
+
+    public static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+    public static boolean isNumeric(CharSequence cs) {
+        if (isEmpty(cs)) {
+            return false;
+        } else {
+            int sz = cs.length();
+
+            for(int i = 0; i < sz; ++i) {
+                if (!Character.isDigit(cs.charAt(i))) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+
+
+
+
+
+
 }
