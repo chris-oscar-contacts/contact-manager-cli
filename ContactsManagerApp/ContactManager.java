@@ -62,11 +62,13 @@ public class ContactManager {
                     System.out.println("No contact found");
                     continueToDeleteContact();  //???
                 } else {
-                    System.out.println("Are you sure you want to delete " + name + "?");
+                    System.out.println("Are you sure you want to permanently delete the contact(s) below?");
+                    preDeleteList.stream().filter(line -> line.contains(name)).forEach(System.out::println);
                     boolean answer = input.yesNo(); //???
                     if (answer) {
-                        System.out.println("Success! " + name + " has been deleted.");
+                        System.out.println("Success! contact(s) has been deleted.");
                         deleteLines(selectedData);
+                        continueToDeleteContact();
                     } else {
                         continueToDeleteContact(); //??
                     }
@@ -77,6 +79,8 @@ public class ContactManager {
         }
 
     }
+
+
 
     public void deleteLines(List<String> data) {
         try {
